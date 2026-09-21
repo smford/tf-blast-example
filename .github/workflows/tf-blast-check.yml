@@ -86,7 +86,7 @@ jobs:
       - name: Enforce policy gates
         if: always()
         run: |
-          echo "Scenario 01 exit: ${{ steps.sg-replace.outcome }}"
+          echo "Scenario 01 exit: (no step id - expected to always pass)"
           echo "Scenario 02 exit: ${{ steps.sg-replace.outcome }}"
           echo "Scenario 03 exit: ${{ steps.rds-destroy.outcome }}"
 

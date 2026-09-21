@@ -18,11 +18,14 @@ jobs:
       - name: Install tf-blast
         run: |
           echo "Installing tf-blast..."
+          INSTALL_DIR="$HOME/.local/bin"
+          mkdir -p "$INSTALL_DIR"
           curl -sSL \
             https://github.com/smford/tf-blast/releases/latest/download/tf-blast_linux_amd64.tar.gz \
-            | tar xz -C /usr/local/bin tf-blast
-          chmod +x /usr/local/bin/tf-blast
-          tf-blast --version
+            | tar xz -C "$INSTALL_DIR" tf-blast
+          chmod +x "$INSTALL_DIR/tf-blast"
+          echo "$INSTALL_DIR" >> "$GITHUB_PATH"
+          "$INSTALL_DIR/tf-blast" --version
 
       - name: Validate all plan JSONs
         id: validate
