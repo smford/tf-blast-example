@@ -1,0 +1,52 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/smford/tf-blast/main/schema/tf-blast.schema.json
+$schema: "https://raw.githubusercontent.com/smford/tf-blast/main/schema/tf-blast.schema.json"
+
+# Extended database protection policy.
+# Treats all database-related resources as CRITICAL and fails immediately.
+# Use in environments with strict data residency or compliance requirements.
+
+fail_on: "critical"
+max_blast: 50
+max_score: 0
+
+rules:
+  critical:
+    - "*rds*"
+    - "*database*"
+    - "*dynamodb*"
+    - "*s3_bucket*"
+    - "*elasticache*"
+    - "*documentdb*"
+    - "*neptune*"
+    - "*timestream*"
+    - "*keyspaces*"
+    - "*redshift*"
+    - "*opensearch*"
+    - "*elasticsearch*"
+  high:
+    - "*security_group*"
+    - "*route_table*"
+    - "*iam_role*"
+    - "*iam_policy*"
+    - "*nat_gateway*"
+    - "*internet_gateway*"
+    - "*acl*"
+    - "*vpc_peering*"
+  medium:
+    - "*instance*"
+    - "*ecs_service*"
+    - "*alb*"
+    - "*elb*"
+    - "*lambda*"
+  low:
+    - "*tag*"
+    - "*log_group*"
+    - "*metric_alarm*"
+    - "*sns_topic*"
+    - "*route53_record*"
+
+ignore_resources:
+  - "*null_resource*"
+  - "*random_id*"
+  - "*random_password*"
+  - "*time_sleep*"

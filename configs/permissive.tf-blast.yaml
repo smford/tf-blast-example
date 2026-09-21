@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/smford/tf-blast/main/schema/tf-blast.schema.json
+$schema: "https://raw.githubusercontent.com/smford/tf-blast/main/schema/tf-blast.schema.json"
+
+# Permissive policy: only fail on CRITICAL (data stores), no blast radius limits.
+# Suitable for development environments where some structural churn is expected.
+
+fail_on: "critical"
+max_blast: 0
+max_score: 0
+
+rules:
+  critical:
+    - "*rds*"
+    - "*database*"
+    - "*dynamodb*"
+    - "*s3_bucket*"
+    - "*elasticache*"
+  high:
+    - "*security_group*"
+    - "*iam_role*"
+    - "*nat_gateway*"
+  medium:
+    - "*instance*"
+    - "*ecs_service*"
+    - "*alb*"
+  low:
+    - "*tag*"
+    - "*log_group*"
+    - "*sns_topic*"
+
+ignore_resources:
+  - "*null_resource*"
+  - "*random_id*"
+  - "*random_password*"
+  - "*time_sleep*"

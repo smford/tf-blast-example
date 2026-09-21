@@ -1,0 +1,42 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/smford/tf-blast/main/schema/tf-blast.schema.json
+$schema: "https://raw.githubusercontent.com/smford/tf-blast/main/schema/tf-blast.schema.json"
+
+# Strict policy: fail on HIGH or above, hard blast radius cap of 10.
+# Use in production gated pipelines where any structural risk must block deployment.
+
+fail_on: "high"
+max_blast: 10
+max_score: 100
+
+rules:
+  critical:
+    - "*rds*"
+    - "*database*"
+    - "*dynamodb*"
+    - "*s3_bucket*"
+    - "*elasticache*"
+    - "*documentdb*"
+  high:
+    - "*security_group*"
+    - "*route_table*"
+    - "*iam_role*"
+    - "*iam_policy*"
+    - "*nat_gateway*"
+    - "*internet_gateway*"
+    - "*acl*"
+  medium:
+    - "*instance*"
+    - "*ecs_service*"
+    - "*alb*"
+    - "*elb*"
+    - "*lambda*"
+  low:
+    - "*tag*"
+    - "*log_group*"
+    - "*metric_alarm*"
+    - "*sns_topic*"
+
+ignore_resources:
+  - "*null_resource*"
+  - "*random_id*"
+  - "*time_sleep*"

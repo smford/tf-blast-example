@@ -1,0 +1,99 @@
+name: "tf-blast Analysis"
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+
+jobs:
+  blast-analysis:
+    name: "Blast Radius Check"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write        # required to post PR comments
+      security-events: write      # required to upload SARIF to Code Scanning
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # In a real Terraform project, plan generation would look like:
+      #   - name: Setup Terraform
+      #     uses: hashicorp/setup-terraform@v3
+      #   - name: Terraform Init
+      #     run: terraform init
+      #   - name: Terraform Plan
+      #     run: terraform plan -out=plan.tfplan
+      #   - name: Export Plan JSON
+      #     run: terraform show -json plan.tfplan > plan.json
+      #
+      # This example uses pre-generated plan JSONs so no AWS credentials are needed.
+
+      # --- Scenario 01: Greenfield VPC (should always pass) ---
+      - name: "Scenario 01 - Greenfield VPC"
+        uses: smford/tf-blast@v1.2.1
+        with:
+          plan-file: scenarios/01-greenfield-vpc/plan.json
+          fail-on: "critical"
+          out-file: scenario-01-report.md
+          post-pr-comment: "false"   # comment posted by the aggregated step below
+
+      # --- Scenario 02: Security Group Replace (fails with strict policy) ---
+      - name: "Scenario 02 - Security Group Replace"
+        id: sg-replace
+        # continue-on-error allows the workflow to collect all results
+        # before making a final pass/fail decision
+        continue-on-error: true
+        uses: smford/tf-blast@v1.2.1
+        with:
+          plan-file: scenarios/02-security-group-replace/plan.json
+          fail-on: "high"
+          config: configs/strict.tf-blast.yaml
+          out-file: scenario-02-report.md
+          sarif-file: scenario-02.sarif
+          upload-sarif: "true"
+          post-pr-comment: "false"
+
+      # --- Scenario 03: RDS Destroy (always fails with default policy) ---
+      - name: "Scenario 03 - RDS Aurora Destroy"
+        id: rds-destroy
+        continue-on-error: true
+        uses: smford/tf-blast@v1.2.1
+        with:
+          plan-file: scenarios/03-rds-destroy/plan.json
+          fail-on: "critical"
+          out-file: scenario-03-report.md
+          sarif-file: scenario-03.sarif
+          upload-sarif: "true"
+          post-pr-comment: "true"
+          github-token: ${{ github.token }}
+
+      # --- Upload all markdown reports as a workflow artifact ---
+      - name: Upload blast radius reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: tf-blast-reports
+          path: |
+            scenario-01-report.md
+            scenario-02-report.md
+            scenario-03-report.md
+          retention-days: 30
+
+      # --- Final gate: fail the workflow if any scenario that should pass did not ---
+      - name: Enforce policy gates
+        if: always()
+        run: |
+          echo "Scenario 01 exit: ${{ steps.sg-replace.outcome }}"
+          echo "Scenario 02 exit: ${{ steps.sg-replace.outcome }}"
+          echo "Scenario 03 exit: ${{ steps.rds-destroy.outcome }}"
+
+          # Scenario 02 is expected to fail (it uses strict policy + fail-on=high)
+          # In a real project you would remove continue-on-error and this step
+          # would simply pass or fail the job.
+          echo ""
+          echo "Note: Scenarios 02 and 03 are intentionally configured to trigger"
+          echo "policy violations to demonstrate tf-blast exit codes in CI."
+          echo "In a real project, a failing scenario would block the deployment."

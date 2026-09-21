@@ -1,0 +1,311 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "variables": {
+    "aws_region": { "value": "us-east-1" },
+    "environment": { "value": "prod" },
+    "project": { "value": "acme" }
+  },
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_security_group.app_servers",
+          "type": "aws_security_group",
+          "name": "app_servers",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 1,
+          "values": {
+            "name": "app-servers-sg-v2",
+            "description": "Application servers security group v2",
+            "vpc_id": "vpc-0123456789abcdef0"
+          }
+        }
+      ]
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_security_group.app_servers",
+      "type": "aws_security_group",
+      "name": "app_servers",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["delete", "create"],
+        "before": {
+          "id": "sg-0aabbccddee11223",
+          "name": "app-servers-sg",
+          "description": "Application servers security group",
+          "vpc_id": "vpc-0123456789abcdef0",
+          "ingress": [
+            {
+              "from_port": 8080,
+              "to_port": 8080,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": ""
+            }
+          ],
+          "egress": [
+            {
+              "from_port": 0,
+              "to_port": 0,
+              "protocol": "-1",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": ""
+            }
+          ],
+          "tags": { "Name": "acme-prod-app-servers" }
+        },
+        "after": {
+          "name": "app-servers-sg-v2",
+          "description": "Application servers security group v2",
+          "vpc_id": "vpc-0123456789abcdef0",
+          "ingress": [
+            {
+              "from_port": 8080,
+              "to_port": 8080,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": ""
+            }
+          ],
+          "egress": [
+            {
+              "from_port": 0,
+              "to_port": 0,
+              "protocol": "-1",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": ""
+            }
+          ],
+          "tags": { "Name": "acme-prod-app-servers" }
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "owner_id": true
+        },
+        "replace_paths": [["name"]],
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[0]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "vpc_security_group_ids": ["sg-0aabbccddee11223"],
+          "tags": { "Name": "acme-prod-web-0" }
+        },
+        "after": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "tags": { "Name": "acme-prod-web-0" }
+        },
+        "after_unknown": {
+          "vpc_security_group_ids": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[1]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "vpc_security_group_ids": ["sg-0aabbccddee11223"],
+          "tags": { "Name": "acme-prod-web-1" }
+        },
+        "after": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "tags": { "Name": "acme-prod-web-1" }
+        },
+        "after_unknown": {
+          "vpc_security_group_ids": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[2]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 2,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "vpc_security_group_ids": ["sg-0aabbccddee11223"],
+          "tags": { "Name": "acme-prod-web-2" }
+        },
+        "after": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "tags": { "Name": "acme-prod-web-2" }
+        },
+        "after_unknown": {
+          "vpc_security_group_ids": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[3]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 3,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "vpc_security_group_ids": ["sg-0aabbccddee11223"],
+          "tags": { "Name": "acme-prod-web-3" }
+        },
+        "after": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "tags": { "Name": "acme-prod-web-3" }
+        },
+        "after_unknown": {
+          "vpc_security_group_ids": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[4]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 4,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "vpc_security_group_ids": ["sg-0aabbccddee11223"],
+          "tags": { "Name": "acme-prod-web-4" }
+        },
+        "after": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "tags": { "Name": "acme-prod-web-4" }
+        },
+        "after_unknown": {
+          "vpc_security_group_ids": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[5]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 5,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "vpc_security_group_ids": ["sg-0aabbccddee11223"],
+          "tags": { "Name": "acme-prod-web-5" }
+        },
+        "after": {
+          "instance_type": "t3.medium",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "key_name": "acme-prod",
+          "tags": { "Name": "acme-prod-web-5" }
+        },
+        "after_unknown": {
+          "vpc_security_group_ids": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_security_group.app_servers",
+          "type": "aws_security_group",
+          "name": "app_servers",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": { "constant_value": "app-servers-sg-v2" },
+            "description": { "constant_value": "Application servers security group v2" }
+          },
+          "schema_version": 1
+        },
+        {
+          "address": "aws_instance.web",
+          "type": "aws_instance",
+          "name": "web",
+          "provider_config_key": "aws",
+          "expressions": {
+            "ami": { "constant_value": "ami-0c55b159cbfafe1f0" },
+            "instance_type": { "constant_value": "t3.medium" },
+            "vpc_security_group_ids": {
+              "references": ["aws_security_group.app_servers.id", "aws_security_group.app_servers"]
+            }
+          },
+          "schema_version": 1,
+          "count_expression": { "constant_value": 6 }
+        }
+      ]
+    }
+  }
+}

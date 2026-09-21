@@ -1,0 +1,158 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "variables": {
+    "aws_region": { "value": "us-east-1" },
+    "environment": { "value": "dev" }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_instance.api[0]",
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "api",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "i-0a1b2c3d4e5f60001",
+          "instance_type": "t3.micro",
+          "vpc_security_group_ids": ["sg-0dev1111111111111"],
+          "tags": { "Name": "acme-dev-api-0", "Environment": "dev" }
+        },
+        "after": {
+          "id": "i-0a1b2c3d4e5f60001",
+          "instance_type": "t3.small",
+          "vpc_security_group_ids": ["sg-0dev1111111111111"],
+          "tags": { "Name": "acme-dev-api-0", "Environment": "dev" }
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "aws_instance.api[1]",
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "api",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "i-0a1b2c3d4e5f60002",
+          "instance_type": "t3.micro",
+          "vpc_security_group_ids": ["sg-0dev1111111111111"],
+          "tags": { "Name": "acme-dev-api-1", "Environment": "dev" }
+        },
+        "after": {
+          "id": "i-0a1b2c3d4e5f60002",
+          "instance_type": "t3.small",
+          "vpc_security_group_ids": ["sg-0dev1111111111111"],
+          "tags": { "Name": "acme-dev-api-1", "Environment": "dev" }
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "aws_instance.api[2]",
+      "mode": "managed",
+      "type": "aws_instance",
+      "name": "api",
+      "index": 2,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "i-0a1b2c3d4e5f60003",
+          "instance_type": "t3.micro",
+          "vpc_security_group_ids": ["sg-0dev1111111111111"],
+          "tags": { "Name": "acme-dev-api-2", "Environment": "dev" }
+        },
+        "after": {
+          "id": "i-0a1b2c3d4e5f60003",
+          "instance_type": "t3.small",
+          "vpc_security_group_ids": ["sg-0dev1111111111111"],
+          "tags": { "Name": "acme-dev-api-2", "Environment": "dev" }
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "aws_cloudwatch_log_group.api",
+      "mode": "managed",
+      "type": "aws_cloudwatch_log_group",
+      "name": "api",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "/aws/ecs/acme-dev-api",
+          "name": "/aws/ecs/acme-dev-api",
+          "retention_in_days": 7
+        },
+        "after": {
+          "id": "/aws/ecs/acme-dev-api",
+          "name": "/aws/ecs/acme-dev-api",
+          "retention_in_days": 14
+        },
+        "after_unknown": {}
+      }
+    },
+    {
+      "address": "aws_security_group.dev_app",
+      "mode": "managed",
+      "type": "aws_security_group",
+      "name": "dev_app",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "sg-0dev1111111111111",
+          "name": "acme-dev-app",
+          "description": "Dev app servers"
+        },
+        "after": {
+          "id": "sg-0dev1111111111111",
+          "name": "acme-dev-app",
+          "description": "Dev app servers"
+        },
+        "after_unknown": {}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_security_group.dev_app",
+          "mode": "managed",
+          "type": "aws_security_group",
+          "name": "dev_app",
+          "provider_config_key": "aws",
+          "schema_version": 0
+        },
+        {
+          "address": "aws_instance.api",
+          "mode": "managed",
+          "type": "aws_instance",
+          "name": "api",
+          "provider_config_key": "aws",
+          "expressions": {
+            "vpc_security_group_ids": { "references": ["aws_security_group.dev_app.id", "aws_security_group.dev_app"] }
+          },
+          "count_expression": { "constant_value": 3 },
+          "schema_version": 1
+        },
+        {
+          "address": "aws_cloudwatch_log_group.api",
+          "mode": "managed",
+          "type": "aws_cloudwatch_log_group",
+          "name": "api",
+          "provider_config_key": "aws",
+          "schema_version": 0
+        }
+      ]
+    }
+  }
+}

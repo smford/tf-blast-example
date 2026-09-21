@@ -1,0 +1,255 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "variables": {
+    "aws_region": { "value": "us-east-1" }
+  },
+  "resource_drift": [
+    {
+      "address": "aws_security_group.app",
+      "type": "aws_security_group",
+      "name": "app",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "sg-0ff11223344aabb00",
+          "name": "acme-prod-app-sg",
+          "description": "Application security group",
+          "vpc_id": "vpc-0123456789abcdef0",
+          "ingress": [
+            {
+              "from_port": 8080,
+              "to_port": 8080,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": "Application traffic"
+            }
+          ],
+          "egress": [
+            {
+              "from_port": 0,
+              "to_port": 0,
+              "protocol": "-1",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": ""
+            }
+          ],
+          "tags": { "Name": "acme-prod-app-sg" }
+        },
+        "after": {
+          "id": "sg-0ff11223344aabb00",
+          "name": "acme-prod-app-sg",
+          "description": "Application security group",
+          "vpc_id": "vpc-0123456789abcdef0",
+          "ingress": [
+            {
+              "from_port": 8080,
+              "to_port": 8080,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": "Application traffic"
+            },
+            {
+              "from_port": 22,
+              "to_port": 22,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": "UNAUTHORIZED: manually added SSH rule"
+            }
+          ],
+          "egress": [
+            {
+              "from_port": 0,
+              "to_port": 0,
+              "protocol": "-1",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "ipv6_cidr_blocks": [],
+              "prefix_list_ids": [],
+              "security_groups": [],
+              "self": false,
+              "description": ""
+            }
+          ],
+          "tags": { "Name": "acme-prod-app-sg" }
+        },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_security_group.app",
+          "type": "aws_security_group",
+          "name": "app",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 1,
+          "values": {
+            "name": "acme-prod-app-sg",
+            "ingress": [
+              {
+                "from_port": 8080,
+                "to_port": 8080,
+                "protocol": "tcp",
+                "cidr_blocks": ["0.0.0.0/0"],
+                "description": "Application traffic"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_security_group.app",
+      "type": "aws_security_group",
+      "name": "app",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "sg-0ff11223344aabb00",
+          "name": "acme-prod-app-sg",
+          "description": "Application security group",
+          "vpc_id": "vpc-0123456789abcdef0",
+          "ingress": [
+            {
+              "from_port": 8080,
+              "to_port": 8080,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "description": "Application traffic"
+            },
+            {
+              "from_port": 22,
+              "to_port": 22,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "description": "UNAUTHORIZED: manually added SSH rule"
+            }
+          ],
+          "tags": { "Name": "acme-prod-app-sg" }
+        },
+        "after": {
+          "id": "sg-0ff11223344aabb00",
+          "name": "acme-prod-app-sg",
+          "description": "Application security group",
+          "vpc_id": "vpc-0123456789abcdef0",
+          "ingress": [
+            {
+              "from_port": 8080,
+              "to_port": 8080,
+              "protocol": "tcp",
+              "cidr_blocks": ["0.0.0.0/0"],
+              "description": "Application traffic"
+            }
+          ],
+          "tags": { "Name": "acme-prod-app-sg" }
+        },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.app[0]",
+      "type": "aws_instance",
+      "name": "app",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.small",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "vpc_security_group_ids": ["sg-0ff11223344aabb00"],
+          "tags": { "Name": "acme-prod-app-0" }
+        },
+        "after": {
+          "instance_type": "t3.small",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "vpc_security_group_ids": ["sg-0ff11223344aabb00"],
+          "tags": { "Name": "acme-prod-app-0" }
+        },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.app[1]",
+      "type": "aws_instance",
+      "name": "app",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "instance_type": "t3.small",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "vpc_security_group_ids": ["sg-0ff11223344aabb00"],
+          "tags": { "Name": "acme-prod-app-1" }
+        },
+        "after": {
+          "instance_type": "t3.small",
+          "ami": "ami-0c55b159cbfafe1f0",
+          "vpc_security_group_ids": ["sg-0ff11223344aabb00"],
+          "tags": { "Name": "acme-prod-app-1" }
+        },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_security_group.app",
+          "type": "aws_security_group",
+          "name": "app",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": { "constant_value": "acme-prod-app-sg" }
+          },
+          "schema_version": 1
+        },
+        {
+          "address": "aws_instance.app",
+          "type": "aws_instance",
+          "name": "app",
+          "provider_config_key": "aws",
+          "expressions": {
+            "vpc_security_group_ids": {
+              "references": ["aws_security_group.app.id", "aws_security_group.app"]
+            }
+          },
+          "schema_version": 1,
+          "count_expression": { "constant_value": 2 }
+        }
+      ]
+    }
+  }
+}

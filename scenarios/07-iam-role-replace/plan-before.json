@@ -1,0 +1,46 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "resource_changes": [
+    {
+      "address": "aws_iam_role.ecs_task_execution",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "ecs_task_execution",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "AcmeECSTaskExecutionRole",
+          "name": "AcmeECSTaskExecutionRole",
+          "arn": "arn:aws:iam::123456789012:role/AcmeECSTaskExecutionRole",
+          "tags": { "Environment": "prod" }
+        },
+        "after": {
+          "id": "AcmeECSTaskExecutionRole",
+          "name": "AcmeECSTaskExecutionRole",
+          "arn": "arn:aws:iam::123456789012:role/AcmeECSTaskExecutionRole",
+          "tags": { "Environment": "prod", "ManagedBy": "terraform", "CostCentre": "platform" }
+        },
+        "after_unknown": {}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_iam_role.ecs_task_execution",
+          "mode": "managed",
+          "type": "aws_iam_role",
+          "name": "ecs_task_execution",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": { "constant_value": "AcmeECSTaskExecutionRole" }
+          },
+          "schema_version": 0
+        }
+      ]
+    }
+  }
+}

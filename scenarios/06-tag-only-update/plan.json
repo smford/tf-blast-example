@@ -1,0 +1,321 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "variables": {
+    "aws_region": { "value": "us-east-1" }
+  },
+  "planned_values": {
+    "root_module": { "resources": [] }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_vpc.main",
+      "type": "aws_vpc",
+      "name": "main",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "vpc-0001", "cidr_block": "10.0.0.0/16", "tags": { "Name": "acme-prod-vpc", "Environment": "prod" } },
+        "after":  { "id": "vpc-0001", "cidr_block": "10.0.0.0/16", "tags": { "Name": "acme-prod-vpc", "Environment": "prod", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_vpc.legacy",
+      "type": "aws_vpc",
+      "name": "legacy",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "vpc-0002", "cidr_block": "10.1.0.0/16", "tags": { "Name": "acme-legacy-vpc", "Environment": "prod" } },
+        "after":  { "id": "vpc-0002", "cidr_block": "10.1.0.0/16", "tags": { "Name": "acme-legacy-vpc", "Environment": "prod", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.public[0]",
+      "type": "aws_subnet",
+      "name": "public",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "subnet-0001", "cidr_block": "10.0.1.0/24", "tags": { "Name": "acme-prod-public-1" } },
+        "after":  { "id": "subnet-0001", "cidr_block": "10.0.1.0/24", "tags": { "Name": "acme-prod-public-1", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.public[1]",
+      "type": "aws_subnet",
+      "name": "public",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "subnet-0002", "cidr_block": "10.0.2.0/24", "tags": { "Name": "acme-prod-public-2" } },
+        "after":  { "id": "subnet-0002", "cidr_block": "10.0.2.0/24", "tags": { "Name": "acme-prod-public-2", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.private[0]",
+      "type": "aws_subnet",
+      "name": "private",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "subnet-0003", "cidr_block": "10.0.10.0/24", "tags": { "Name": "acme-prod-private-1" } },
+        "after":  { "id": "subnet-0003", "cidr_block": "10.0.10.0/24", "tags": { "Name": "acme-prod-private-1", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.private[1]",
+      "type": "aws_subnet",
+      "name": "private",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "subnet-0004", "cidr_block": "10.0.11.0/24", "tags": { "Name": "acme-prod-private-2" } },
+        "after":  { "id": "subnet-0004", "cidr_block": "10.0.11.0/24", "tags": { "Name": "acme-prod-private-2", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_security_group.app",
+      "type": "aws_security_group",
+      "name": "app",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "sg-0001", "name": "acme-prod-app-sg", "tags": { "Name": "acme-prod-app-sg" } },
+        "after":  { "id": "sg-0001", "name": "acme-prod-app-sg", "tags": { "Name": "acme-prod-app-sg", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_security_group.alb",
+      "type": "aws_security_group",
+      "name": "alb",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "sg-0002", "name": "acme-prod-alb-sg", "tags": { "Name": "acme-prod-alb-sg" } },
+        "after":  { "id": "sg-0002", "name": "acme-prod-alb-sg", "tags": { "Name": "acme-prod-alb-sg", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[0]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "i-001", "instance_type": "t3.medium", "tags": { "Name": "acme-prod-web-0" } },
+        "after":  { "id": "i-001", "instance_type": "t3.medium", "tags": { "Name": "acme-prod-web-0", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.web[1]",
+      "type": "aws_instance",
+      "name": "web",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "i-002", "instance_type": "t3.medium", "tags": { "Name": "acme-prod-web-1" } },
+        "after":  { "id": "i-002", "instance_type": "t3.medium", "tags": { "Name": "acme-prod-web-1", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_instance.bastion",
+      "type": "aws_instance",
+      "name": "bastion",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "i-003", "instance_type": "t3.micro", "tags": { "Name": "acme-prod-bastion" } },
+        "after":  { "id": "i-003", "instance_type": "t3.micro", "tags": { "Name": "acme-prod-bastion", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_s3_bucket.uploads",
+      "type": "aws_s3_bucket",
+      "name": "uploads",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "acme-prod-uploads-2026", "bucket": "acme-prod-uploads-2026", "tags": { "Name": "acme-prod-uploads" } },
+        "after":  { "id": "acme-prod-uploads-2026", "bucket": "acme-prod-uploads-2026", "tags": { "Name": "acme-prod-uploads", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_s3_bucket.backups",
+      "type": "aws_s3_bucket",
+      "name": "backups",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "acme-prod-backups-2026", "bucket": "acme-prod-backups-2026", "tags": { "Name": "acme-prod-backups" } },
+        "after":  { "id": "acme-prod-backups-2026", "bucket": "acme-prod-backups-2026", "tags": { "Name": "acme-prod-backups", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_rds_cluster.main",
+      "type": "aws_rds_cluster",
+      "name": "main",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "acme-aurora-prod", "cluster_identifier": "acme-aurora-prod", "tags": { "Name": "acme-aurora-prod" } },
+        "after":  { "id": "acme-aurora-prod", "cluster_identifier": "acme-aurora-prod", "tags": { "Name": "acme-aurora-prod", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": { "master_password": true },
+        "after_sensitive": { "master_password": true }
+      }
+    },
+    {
+      "address": "aws_ecs_service.api",
+      "type": "aws_ecs_service",
+      "name": "api",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "arn:aws:ecs:us-east-1:123456789012:service/acme-prod-ecs/acme-prod-api", "name": "acme-prod-api", "desired_count": 4, "tags": { "Name": "acme-prod-api" } },
+        "after":  { "id": "arn:aws:ecs:us-east-1:123456789012:service/acme-prod-ecs/acme-prod-api", "name": "acme-prod-api", "desired_count": 4, "tags": { "Name": "acme-prod-api", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_ecs_service.worker",
+      "type": "aws_ecs_service",
+      "name": "worker",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "arn:aws:ecs:us-east-1:123456789012:service/acme-prod-ecs/acme-prod-worker", "name": "acme-prod-worker", "desired_count": 2, "tags": { "Name": "acme-prod-worker" } },
+        "after":  { "id": "arn:aws:ecs:us-east-1:123456789012:service/acme-prod-ecs/acme-prod-worker", "name": "acme-prod-worker", "desired_count": 2, "tags": { "Name": "acme-prod-worker", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_alb.main",
+      "type": "aws_alb",
+      "name": "main",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/acme-prod-alb/abcd1234", "name": "acme-prod-alb", "tags": { "Name": "acme-prod-alb" } },
+        "after":  { "id": "arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/acme-prod-alb/abcd1234", "name": "acme-prod-alb", "tags": { "Name": "acme-prod-alb", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_alb.legacy",
+      "type": "aws_alb",
+      "name": "legacy",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/acme-legacy-alb/efgh5678", "name": "acme-legacy-alb", "tags": { "Name": "acme-legacy-alb" } },
+        "after":  { "id": "arn:aws:elasticloadbalancing:us-east-1:123456789012:loadbalancer/app/acme-legacy-alb/efgh5678", "name": "acme-legacy-alb", "tags": { "Name": "acme-legacy-alb", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_cloudwatch_log_group.api",
+      "type": "aws_cloudwatch_log_group",
+      "name": "api",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "/ecs/acme-prod/api", "name": "/ecs/acme-prod/api", "retention_in_days": 30, "tags": { "Name": "acme-prod-api-logs" } },
+        "after":  { "id": "/ecs/acme-prod/api", "name": "/ecs/acme-prod/api", "retention_in_days": 30, "tags": { "Name": "acme-prod-api-logs", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_cloudwatch_log_group.worker",
+      "type": "aws_cloudwatch_log_group",
+      "name": "worker",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": { "id": "/ecs/acme-prod/worker", "name": "/ecs/acme-prod/worker", "retention_in_days": 30, "tags": { "Name": "acme-prod-worker-logs" } },
+        "after":  { "id": "/ecs/acme-prod/worker", "name": "/ecs/acme-prod/worker", "retention_in_days": 30, "tags": { "Name": "acme-prod-worker-logs", "CostCentre": "engineering-platform" } },
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        { "address": "aws_vpc.main", "type": "aws_vpc", "name": "main", "provider_config_key": "aws", "expressions": {}, "schema_version": 1 },
+        { "address": "aws_vpc.legacy", "type": "aws_vpc", "name": "legacy", "provider_config_key": "aws", "expressions": {}, "schema_version": 1 },
+        { "address": "aws_subnet.public", "type": "aws_subnet", "name": "public", "provider_config_key": "aws", "expressions": { "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] } }, "schema_version": 1, "count_expression": { "constant_value": 2 } },
+        { "address": "aws_subnet.private", "type": "aws_subnet", "name": "private", "provider_config_key": "aws", "expressions": { "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] } }, "schema_version": 1, "count_expression": { "constant_value": 2 } },
+        { "address": "aws_security_group.app", "type": "aws_security_group", "name": "app", "provider_config_key": "aws", "expressions": { "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] } }, "schema_version": 1 },
+        { "address": "aws_security_group.alb", "type": "aws_security_group", "name": "alb", "provider_config_key": "aws", "expressions": { "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] } }, "schema_version": 1 },
+        { "address": "aws_instance.web", "type": "aws_instance", "name": "web", "provider_config_key": "aws", "expressions": {}, "schema_version": 1, "count_expression": { "constant_value": 2 } },
+        { "address": "aws_instance.bastion", "type": "aws_instance", "name": "bastion", "provider_config_key": "aws", "expressions": {}, "schema_version": 1 },
+        { "address": "aws_s3_bucket.uploads", "type": "aws_s3_bucket", "name": "uploads", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 },
+        { "address": "aws_s3_bucket.backups", "type": "aws_s3_bucket", "name": "backups", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 },
+        { "address": "aws_rds_cluster.main", "type": "aws_rds_cluster", "name": "main", "provider_config_key": "aws", "expressions": {}, "schema_version": 1 },
+        { "address": "aws_ecs_service.api", "type": "aws_ecs_service", "name": "api", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 },
+        { "address": "aws_ecs_service.worker", "type": "aws_ecs_service", "name": "worker", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 },
+        { "address": "aws_alb.main", "type": "aws_alb", "name": "main", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 },
+        { "address": "aws_alb.legacy", "type": "aws_alb", "name": "legacy", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 },
+        { "address": "aws_cloudwatch_log_group.api", "type": "aws_cloudwatch_log_group", "name": "api", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 },
+        { "address": "aws_cloudwatch_log_group.worker", "type": "aws_cloudwatch_log_group", "name": "worker", "provider_config_key": "aws", "expressions": {}, "schema_version": 0 }
+      ]
+    }
+  }
+}

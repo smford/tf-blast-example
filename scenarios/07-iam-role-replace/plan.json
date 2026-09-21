@@ -1,0 +1,270 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "variables": {
+    "aws_region": { "value": "us-east-1" },
+    "environment": { "value": "prod" },
+    "project": { "value": "acme" }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_iam_role.ecs_task_execution",
+      "mode": "managed",
+      "type": "aws_iam_role",
+      "name": "ecs_task_execution",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["delete", "create"],
+        "before": {
+          "id": "AcmeECSTaskExecutionRole",
+          "name": "AcmeECSTaskExecutionRole",
+          "arn": "arn:aws:iam::123456789012:role/AcmeECSTaskExecutionRole",
+          "description": "ECS Task Execution Role",
+          "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+        },
+        "after": {
+          "name": "acme-prod-ecs-task-execution",
+          "description": "ECS Task Execution Role",
+          "assume_role_policy": "{\"Version\":\"2012-10-17\",\"Statement\":[{\"Effect\":\"Allow\",\"Principal\":{\"Service\":\"ecs-tasks.amazonaws.com\"},\"Action\":\"sts:AssumeRole\"}]}"
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "unique_id": true,
+          "create_date": true
+        },
+        "replace_paths": [["name"]]
+      },
+      "action_reason": "replacement_forced_by_replace_paths"
+    },
+    {
+      "address": "aws_iam_role_policy_attachment.ecs_task_execution_policy[0]",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ecs_task_execution_policy",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "AcmeECSTaskExecutionRole/arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy",
+          "role": "AcmeECSTaskExecutionRole",
+          "policy_arn": "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+        },
+        "after": {
+          "policy_arn": "arn:aws:iam::aws:policy/service-role/AmazonECSTaskExecutionRolePolicy"
+        },
+        "after_unknown": {
+          "id": true,
+          "role": true
+        }
+      }
+    },
+    {
+      "address": "aws_iam_role_policy_attachment.ecs_task_execution_policy[1]",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ecs_task_execution_policy",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "AcmeECSTaskExecutionRole/arn:aws:iam::aws:policy/CloudWatchLogsFullAccess",
+          "role": "AcmeECSTaskExecutionRole",
+          "policy_arn": "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+        },
+        "after": {
+          "policy_arn": "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"
+        },
+        "after_unknown": {
+          "id": true,
+          "role": true
+        }
+      }
+    },
+    {
+      "address": "aws_iam_role_policy_attachment.ecs_task_execution_policy[2]",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ecs_task_execution_policy",
+      "index": 2,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "AcmeECSTaskExecutionRole/arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly",
+          "role": "AcmeECSTaskExecutionRole",
+          "policy_arn": "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        },
+        "after": {
+          "policy_arn": "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly"
+        },
+        "after_unknown": {
+          "id": true,
+          "role": true
+        }
+      }
+    },
+    {
+      "address": "aws_iam_role_policy_attachment.ecs_task_execution_policy[3]",
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "ecs_task_execution_policy",
+      "index": 3,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "id": "AcmeECSTaskExecutionRole/arn:aws:iam::123456789012:policy/acme-secrets-access",
+          "role": "AcmeECSTaskExecutionRole",
+          "policy_arn": "arn:aws:iam::123456789012:policy/acme-secrets-access"
+        },
+        "after": {
+          "policy_arn": "arn:aws:iam::123456789012:policy/acme-secrets-access"
+        },
+        "after_unknown": {
+          "id": true,
+          "role": true
+        }
+      }
+    },
+    {
+      "address": "module.app.aws_ecs_task_definition.api",
+      "module_address": "module.app",
+      "mode": "managed",
+      "type": "aws_ecs_task_definition",
+      "name": "api",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "family": "acme-api",
+          "execution_role_arn": "arn:aws:iam::123456789012:role/AcmeECSTaskExecutionRole",
+          "revision": 12
+        },
+        "after": {
+          "family": "acme-api",
+          "revision": 13
+        },
+        "after_unknown": {
+          "execution_role_arn": true,
+          "arn": true,
+          "arn_without_revision": true
+        }
+      }
+    },
+    {
+      "address": "module.app.aws_ecs_task_definition.worker",
+      "module_address": "module.app",
+      "mode": "managed",
+      "type": "aws_ecs_task_definition",
+      "name": "worker",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "family": "acme-worker",
+          "execution_role_arn": "arn:aws:iam::123456789012:role/AcmeECSTaskExecutionRole",
+          "revision": 8
+        },
+        "after": {
+          "family": "acme-worker",
+          "revision": 9
+        },
+        "after_unknown": {
+          "execution_role_arn": true,
+          "arn": true,
+          "arn_without_revision": true
+        }
+      }
+    },
+    {
+      "address": "module.app.aws_ecs_task_definition.scheduler",
+      "module_address": "module.app",
+      "mode": "managed",
+      "type": "aws_ecs_task_definition",
+      "name": "scheduler",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "family": "acme-scheduler",
+          "execution_role_arn": "arn:aws:iam::123456789012:role/AcmeECSTaskExecutionRole",
+          "revision": 5
+        },
+        "after": {
+          "family": "acme-scheduler",
+          "revision": 6
+        },
+        "after_unknown": {
+          "execution_role_arn": true,
+          "arn": true,
+          "arn_without_revision": true
+        }
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_iam_role.ecs_task_execution",
+          "mode": "managed",
+          "type": "aws_iam_role",
+          "name": "ecs_task_execution",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": { "references": ["var.project", "var.environment"] }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_iam_role_policy_attachment.ecs_task_execution_policy",
+          "mode": "managed",
+          "type": "aws_iam_role_policy_attachment",
+          "name": "ecs_task_execution_policy",
+          "provider_config_key": "aws",
+          "expressions": {
+            "role": { "references": ["aws_iam_role.ecs_task_execution.name", "aws_iam_role.ecs_task_execution"] }
+          },
+          "count_expression": { "constant_value": 4 },
+          "schema_version": 0
+        },
+        {
+          "address": "module.app.aws_ecs_task_definition.api",
+          "mode": "managed",
+          "type": "aws_ecs_task_definition",
+          "name": "api",
+          "provider_config_key": "aws",
+          "expressions": {
+            "execution_role_arn": { "references": ["aws_iam_role.ecs_task_execution.arn", "aws_iam_role.ecs_task_execution"] }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "module.app.aws_ecs_task_definition.worker",
+          "mode": "managed",
+          "type": "aws_ecs_task_definition",
+          "name": "worker",
+          "provider_config_key": "aws",
+          "expressions": {
+            "execution_role_arn": { "references": ["aws_iam_role.ecs_task_execution.arn", "aws_iam_role.ecs_task_execution"] }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "module.app.aws_ecs_task_definition.scheduler",
+          "mode": "managed",
+          "type": "aws_ecs_task_definition",
+          "name": "scheduler",
+          "provider_config_key": "aws",
+          "expressions": {
+            "execution_role_arn": { "references": ["aws_iam_role.ecs_task_execution.arn", "aws_iam_role.ecs_task_execution"] }
+          },
+          "schema_version": 0
+        }
+      ]
+    }
+  }
+}

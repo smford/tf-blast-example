@@ -1,0 +1,650 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "variables": {
+    "aws_region": { "value": "us-east-1" },
+    "environment": { "value": "prod" },
+    "project": { "value": "acme" }
+  },
+  "planned_values": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_vpc.main",
+          "type": "aws_vpc",
+          "name": "main",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 1,
+          "values": {
+            "cidr_block": "10.0.0.0/16",
+            "enable_dns_hostnames": true,
+            "enable_dns_support": true,
+            "tags": {
+              "Name": "acme-prod-vpc",
+              "Environment": "prod",
+              "Project": "acme",
+              "ManagedBy": "terraform"
+            }
+          }
+        },
+        {
+          "address": "aws_subnet.public[0]",
+          "type": "aws_subnet",
+          "name": "public",
+          "index": 0,
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 1,
+          "values": {
+            "cidr_block": "10.0.1.0/24",
+            "availability_zone": "us-east-1a",
+            "map_public_ip_on_launch": true,
+            "tags": { "Name": "acme-prod-public-subnet-1", "Tier": "public" }
+          }
+        },
+        {
+          "address": "aws_subnet.public[1]",
+          "type": "aws_subnet",
+          "name": "public",
+          "index": 1,
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 1,
+          "values": {
+            "cidr_block": "10.0.2.0/24",
+            "availability_zone": "us-east-1b",
+            "map_public_ip_on_launch": true,
+            "tags": { "Name": "acme-prod-public-subnet-2", "Tier": "public" }
+          }
+        },
+        {
+          "address": "aws_subnet.private[0]",
+          "type": "aws_subnet",
+          "name": "private",
+          "index": 0,
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 1,
+          "values": {
+            "cidr_block": "10.0.10.0/24",
+            "availability_zone": "us-east-1a",
+            "map_public_ip_on_launch": false,
+            "tags": { "Name": "acme-prod-private-subnet-1", "Tier": "private" }
+          }
+        },
+        {
+          "address": "aws_subnet.private[1]",
+          "type": "aws_subnet",
+          "name": "private",
+          "index": 1,
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 1,
+          "values": {
+            "cidr_block": "10.0.11.0/24",
+            "availability_zone": "us-east-1b",
+            "map_public_ip_on_launch": false,
+            "tags": { "Name": "acme-prod-private-subnet-2", "Tier": "private" }
+          }
+        },
+        {
+          "address": "aws_internet_gateway.main",
+          "type": "aws_internet_gateway",
+          "name": "main",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "tags": { "Name": "acme-prod-igw" }
+          }
+        },
+        {
+          "address": "aws_eip.nat",
+          "type": "aws_eip",
+          "name": "nat",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "domain": "vpc",
+            "tags": { "Name": "acme-prod-nat-eip" }
+          }
+        },
+        {
+          "address": "aws_nat_gateway.main",
+          "type": "aws_nat_gateway",
+          "name": "main",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "connectivity_type": "public",
+            "tags": { "Name": "acme-prod-nat-gw" }
+          }
+        },
+        {
+          "address": "aws_route_table.public",
+          "type": "aws_route_table",
+          "name": "public",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "tags": { "Name": "acme-prod-public-rt" }
+          }
+        },
+        {
+          "address": "aws_route_table.private",
+          "type": "aws_route_table",
+          "name": "private",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "tags": { "Name": "acme-prod-private-rt" }
+          }
+        },
+        {
+          "address": "aws_route_table_association.public[0]",
+          "type": "aws_route_table_association",
+          "name": "public",
+          "index": 0,
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {}
+        },
+        {
+          "address": "aws_route_table_association.public[1]",
+          "type": "aws_route_table_association",
+          "name": "public",
+          "index": 1,
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {}
+        },
+        {
+          "address": "aws_s3_bucket.flow_logs",
+          "type": "aws_s3_bucket",
+          "name": "flow_logs",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "bucket": "acme-prod-flow-logs-2026",
+            "force_destroy": false,
+            "tags": { "Name": "acme-prod-flow-logs", "Purpose": "vpc-flow-logs" }
+          }
+        },
+        {
+          "address": "aws_cloudwatch_log_group.flow_logs",
+          "type": "aws_cloudwatch_log_group",
+          "name": "flow_logs",
+          "provider_name": "registry.terraform.io/hashicorp/aws",
+          "schema_version": 0,
+          "values": {
+            "name": "/aws/vpc/acme-prod/flow-logs",
+            "retention_in_days": 30
+          }
+        }
+      ]
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_vpc.main",
+      "type": "aws_vpc",
+      "name": "main",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "cidr_block": "10.0.0.0/16",
+          "enable_dns_hostnames": true,
+          "enable_dns_support": true,
+          "tags": {
+            "Name": "acme-prod-vpc",
+            "Environment": "prod",
+            "Project": "acme",
+            "ManagedBy": "terraform"
+          }
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "owner_id": true,
+          "default_network_acl_id": true,
+          "default_route_table_id": true,
+          "default_security_group_id": true,
+          "dhcp_options_id": true,
+          "main_route_table_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.public[0]",
+      "type": "aws_subnet",
+      "name": "public",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "cidr_block": "10.0.1.0/24",
+          "availability_zone": "us-east-1a",
+          "map_public_ip_on_launch": true,
+          "tags": { "Name": "acme-prod-public-subnet-1", "Tier": "public" }
+        },
+        "after_unknown": {
+          "id": true,
+          "vpc_id": true,
+          "arn": true,
+          "owner_id": true,
+          "availability_zone_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.public[1]",
+      "type": "aws_subnet",
+      "name": "public",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "cidr_block": "10.0.2.0/24",
+          "availability_zone": "us-east-1b",
+          "map_public_ip_on_launch": true,
+          "tags": { "Name": "acme-prod-public-subnet-2", "Tier": "public" }
+        },
+        "after_unknown": {
+          "id": true,
+          "vpc_id": true,
+          "arn": true,
+          "owner_id": true,
+          "availability_zone_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.private[0]",
+      "type": "aws_subnet",
+      "name": "private",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "cidr_block": "10.0.10.0/24",
+          "availability_zone": "us-east-1a",
+          "map_public_ip_on_launch": false,
+          "tags": { "Name": "acme-prod-private-subnet-1", "Tier": "private" }
+        },
+        "after_unknown": {
+          "id": true,
+          "vpc_id": true,
+          "arn": true,
+          "owner_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_subnet.private[1]",
+      "type": "aws_subnet",
+      "name": "private",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "cidr_block": "10.0.11.0/24",
+          "availability_zone": "us-east-1b",
+          "map_public_ip_on_launch": false,
+          "tags": { "Name": "acme-prod-private-subnet-2", "Tier": "private" }
+        },
+        "after_unknown": {
+          "id": true,
+          "vpc_id": true,
+          "arn": true,
+          "owner_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_internet_gateway.main",
+      "type": "aws_internet_gateway",
+      "name": "main",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "tags": { "Name": "acme-prod-igw" }
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "vpc_id": true,
+          "owner_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_eip.nat",
+      "type": "aws_eip",
+      "name": "nat",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "domain": "vpc",
+          "tags": { "Name": "acme-prod-nat-eip" }
+        },
+        "after_unknown": {
+          "id": true,
+          "public_ip": true,
+          "allocation_id": true,
+          "private_ip": true,
+          "public_dns": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_nat_gateway.main",
+      "type": "aws_nat_gateway",
+      "name": "main",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "connectivity_type": "public",
+          "tags": { "Name": "acme-prod-nat-gw" }
+        },
+        "after_unknown": {
+          "id": true,
+          "subnet_id": true,
+          "allocation_id": true,
+          "public_ip": true,
+          "private_ip": true,
+          "network_interface_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_route_table.public",
+      "type": "aws_route_table",
+      "name": "public",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "tags": { "Name": "acme-prod-public-rt" }
+        },
+        "after_unknown": {
+          "id": true,
+          "vpc_id": true,
+          "owner_id": true,
+          "route": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_route_table.private",
+      "type": "aws_route_table",
+      "name": "private",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "tags": { "Name": "acme-prod-private-rt" }
+        },
+        "after_unknown": {
+          "id": true,
+          "vpc_id": true,
+          "owner_id": true,
+          "route": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_route_table_association.public[0]",
+      "type": "aws_route_table_association",
+      "name": "public",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {},
+        "after_unknown": {
+          "id": true,
+          "subnet_id": true,
+          "route_table_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_route_table_association.public[1]",
+      "type": "aws_route_table_association",
+      "name": "public",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {},
+        "after_unknown": {
+          "id": true,
+          "subnet_id": true,
+          "route_table_id": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_s3_bucket.flow_logs",
+      "type": "aws_s3_bucket",
+      "name": "flow_logs",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "bucket": "acme-prod-flow-logs-2026",
+          "force_destroy": false,
+          "tags": { "Name": "acme-prod-flow-logs", "Purpose": "vpc-flow-logs" }
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true,
+          "bucket_domain_name": true,
+          "bucket_regional_domain_name": true,
+          "hosted_zone_id": true,
+          "region": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "aws_cloudwatch_log_group.flow_logs",
+      "type": "aws_cloudwatch_log_group",
+      "name": "flow_logs",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["create"],
+        "before": null,
+        "after": {
+          "name": "/aws/vpc/acme-prod/flow-logs",
+          "retention_in_days": 30
+        },
+        "after_unknown": {
+          "id": true,
+          "arn": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_vpc.main",
+          "type": "aws_vpc",
+          "name": "main",
+          "provider_config_key": "aws",
+          "expressions": {
+            "cidr_block": { "constant_value": "10.0.0.0/16" },
+            "enable_dns_hostnames": { "constant_value": true },
+            "enable_dns_support": { "constant_value": true }
+          },
+          "schema_version": 1
+        },
+        {
+          "address": "aws_subnet.public",
+          "type": "aws_subnet",
+          "name": "public",
+          "provider_config_key": "aws",
+          "expressions": {
+            "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] }
+          },
+          "schema_version": 1,
+          "count_expression": { "constant_value": 2 }
+        },
+        {
+          "address": "aws_subnet.private",
+          "type": "aws_subnet",
+          "name": "private",
+          "provider_config_key": "aws",
+          "expressions": {
+            "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] }
+          },
+          "schema_version": 1,
+          "count_expression": { "constant_value": 2 }
+        },
+        {
+          "address": "aws_internet_gateway.main",
+          "type": "aws_internet_gateway",
+          "name": "main",
+          "provider_config_key": "aws",
+          "expressions": {
+            "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_eip.nat",
+          "type": "aws_eip",
+          "name": "nat",
+          "provider_config_key": "aws",
+          "expressions": {
+            "domain": { "constant_value": "vpc" }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_nat_gateway.main",
+          "type": "aws_nat_gateway",
+          "name": "main",
+          "provider_config_key": "aws",
+          "expressions": {
+            "allocation_id": { "references": ["aws_eip.nat.id", "aws_eip.nat"] },
+            "subnet_id": { "references": ["aws_subnet.public[0]", "aws_subnet.public"] }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_route_table.public",
+          "type": "aws_route_table",
+          "name": "public",
+          "provider_config_key": "aws",
+          "expressions": {
+            "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] }
+          },
+          "depends_on": ["aws_internet_gateway.main"],
+          "schema_version": 0
+        },
+        {
+          "address": "aws_route_table.private",
+          "type": "aws_route_table",
+          "name": "private",
+          "provider_config_key": "aws",
+          "expressions": {
+            "vpc_id": { "references": ["aws_vpc.main.id", "aws_vpc.main"] }
+          },
+          "depends_on": ["aws_nat_gateway.main"],
+          "schema_version": 0
+        },
+        {
+          "address": "aws_route_table_association.public",
+          "type": "aws_route_table_association",
+          "name": "public",
+          "provider_config_key": "aws",
+          "expressions": {
+            "subnet_id": { "references": ["aws_subnet.public[count.index]", "aws_subnet.public"] },
+            "route_table_id": { "references": ["aws_route_table.public.id", "aws_route_table.public"] }
+          },
+          "schema_version": 0,
+          "count_expression": { "constant_value": 2 }
+        },
+        {
+          "address": "aws_route_table_association.private",
+          "type": "aws_route_table_association",
+          "name": "private",
+          "provider_config_key": "aws",
+          "expressions": {
+            "subnet_id": { "references": ["aws_subnet.private[count.index]", "aws_subnet.private"] },
+            "route_table_id": { "references": ["aws_route_table.private.id", "aws_route_table.private"] }
+          },
+          "schema_version": 0,
+          "count_expression": { "constant_value": 2 }
+        },
+        {
+          "address": "aws_s3_bucket.flow_logs",
+          "type": "aws_s3_bucket",
+          "name": "flow_logs",
+          "provider_config_key": "aws",
+          "expressions": {
+            "bucket": { "constant_value": "acme-prod-flow-logs-2026" }
+          },
+          "schema_version": 0
+        },
+        {
+          "address": "aws_cloudwatch_log_group.flow_logs",
+          "type": "aws_cloudwatch_log_group",
+          "name": "flow_logs",
+          "provider_config_key": "aws",
+          "expressions": {
+            "name": { "constant_value": "/aws/vpc/acme-prod/flow-logs" },
+            "retention_in_days": { "constant_value": 30 }
+          },
+          "schema_version": 0
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,217 @@
+{
+  "format_version": "1.2",
+  "terraform_version": "1.9.0",
+  "variables": {
+    "aws_region": { "value": "us-east-1" },
+    "environment": { "value": "prod" },
+    "project": { "value": "acme" }
+  },
+  "planned_values": {
+    "root_module": {
+      "resources": []
+    }
+  },
+  "resource_changes": [
+    {
+      "address": "aws_rds_cluster.aurora_pg",
+      "type": "aws_rds_cluster",
+      "name": "aurora_pg",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["delete"],
+        "before": {
+          "id": "acme-aurora-prod",
+          "cluster_identifier": "acme-aurora-prod",
+          "engine": "aurora-postgresql",
+          "engine_version": "15.4",
+          "database_name": "acmedb",
+          "port": 5432,
+          "endpoint": "acme-aurora-prod.cluster-cxxx.us-east-1.rds.amazonaws.com",
+          "reader_endpoint": "acme-aurora-prod.cluster-ro-cxxx.us-east-1.rds.amazonaws.com",
+          "hosted_zone_id": "Z2R2ITUGPM61AM",
+          "master_username": "acmeadmin",
+          "deletion_protection": false,
+          "skip_final_snapshot": false,
+          "backup_retention_period": 7,
+          "preferred_backup_window": "03:00-04:00",
+          "preferred_maintenance_window": "sun:05:00-sun:06:00",
+          "storage_encrypted": true,
+          "tags": {
+            "Name": "acme-aurora-prod",
+            "Environment": "prod",
+            "Project": "acme"
+          }
+        },
+        "after": null,
+        "after_unknown": {},
+        "before_sensitive": {
+          "master_password": true
+        },
+        "after_sensitive": false
+      }
+    },
+    {
+      "address": "aws_rds_cluster_instance.aurora_pg[0]",
+      "type": "aws_rds_cluster_instance",
+      "name": "aurora_pg",
+      "index": 0,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["delete"],
+        "before": {
+          "id": "acme-aurora-prod-0",
+          "cluster_identifier": "acme-aurora-prod",
+          "instance_class": "db.r6g.large",
+          "engine": "aurora-postgresql",
+          "engine_version": "15.4",
+          "publicly_accessible": false,
+          "promotion_tier": 0,
+          "tags": {
+            "Name": "acme-aurora-prod-0",
+            "Environment": "prod",
+            "Project": "acme"
+          }
+        },
+        "after": null,
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": false
+      }
+    },
+    {
+      "address": "aws_rds_cluster_instance.aurora_pg[1]",
+      "type": "aws_rds_cluster_instance",
+      "name": "aurora_pg",
+      "index": 1,
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["delete"],
+        "before": {
+          "id": "acme-aurora-prod-1",
+          "cluster_identifier": "acme-aurora-prod",
+          "instance_class": "db.r6g.large",
+          "engine": "aurora-postgresql",
+          "engine_version": "15.4",
+          "publicly_accessible": false,
+          "promotion_tier": 1,
+          "tags": {
+            "Name": "acme-aurora-prod-1",
+            "Environment": "prod",
+            "Project": "acme"
+          }
+        },
+        "after": null,
+        "after_unknown": {},
+        "before_sensitive": false,
+        "after_sensitive": false
+      }
+    },
+    {
+      "address": "module.api.aws_ecs_service.web",
+      "module_address": "module.api",
+      "type": "aws_ecs_service",
+      "name": "web",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "name": "acme-web-api",
+          "cluster": "acme-prod-ecs",
+          "desired_count": 3,
+          "launch_type": "FARGATE",
+          "tags": { "Name": "acme-web-api" }
+        },
+        "after": {
+          "name": "acme-web-api",
+          "cluster": "acme-prod-ecs",
+          "desired_count": 3,
+          "launch_type": "FARGATE",
+          "tags": { "Name": "acme-web-api" }
+        },
+        "after_unknown": {
+          "task_definition": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    },
+    {
+      "address": "module.worker.aws_ecs_service.job_processor",
+      "module_address": "module.worker",
+      "type": "aws_ecs_service",
+      "name": "job_processor",
+      "provider_name": "registry.terraform.io/hashicorp/aws",
+      "change": {
+        "actions": ["update"],
+        "before": {
+          "name": "acme-job-processor",
+          "cluster": "acme-prod-ecs",
+          "desired_count": 2,
+          "launch_type": "FARGATE",
+          "tags": { "Name": "acme-job-processor" }
+        },
+        "after": {
+          "name": "acme-job-processor",
+          "cluster": "acme-prod-ecs",
+          "desired_count": 2,
+          "launch_type": "FARGATE",
+          "tags": { "Name": "acme-job-processor" }
+        },
+        "after_unknown": {
+          "task_definition": true
+        },
+        "before_sensitive": false,
+        "after_sensitive": {}
+      }
+    }
+  ],
+  "configuration": {
+    "root_module": {
+      "resources": [
+        {
+          "address": "aws_rds_cluster.aurora_pg",
+          "type": "aws_rds_cluster",
+          "name": "aurora_pg",
+          "provider_config_key": "aws",
+          "expressions": {
+            "cluster_identifier": { "constant_value": "acme-aurora-prod" },
+            "engine": { "constant_value": "aurora-postgresql" },
+            "engine_version": { "constant_value": "15.4" }
+          },
+          "schema_version": 1
+        },
+        {
+          "address": "aws_rds_cluster_instance.aurora_pg",
+          "type": "aws_rds_cluster_instance",
+          "name": "aurora_pg",
+          "provider_config_key": "aws",
+          "expressions": {
+            "cluster_identifier": {
+              "references": ["aws_rds_cluster.aurora_pg.id", "aws_rds_cluster.aurora_pg"]
+            }
+          },
+          "schema_version": 1,
+          "count_expression": { "constant_value": 2 }
+        }
+      ],
+      "module_calls": {
+        "api": {
+          "source": "./modules/api",
+          "expressions": {
+            "db_endpoint": {
+              "references": ["aws_rds_cluster.aurora_pg.endpoint", "aws_rds_cluster.aurora_pg"]
+            }
+          }
+        },
+        "worker": {
+          "source": "./modules/worker",
+          "expressions": {
+            "db_endpoint": {
+              "references": ["aws_rds_cluster.aurora_pg.endpoint", "aws_rds_cluster.aurora_pg"]
+            }
+          }
+        }
+      }
+    }
+  }
+}
