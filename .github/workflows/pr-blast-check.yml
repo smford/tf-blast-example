@@ -49,9 +49,25 @@ jobs:
         run: |
           # Get list of changed plan JSON files vs the base branch
           git fetch origin "${{ github.base_ref }}" --depth=1 2>/dev/null || true
-          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}" HEAD \
-            -- 'scenarios/**/plan*.json' 2>/dev/null || \
-            find scenarios -name "plan*.json" | sort)
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}" HEAD -- 'scenarios/**/plan*.json' 2>/dev/null)
+
+          # If no plan.json changed directly, find plan.json files in any changed scenario directories
+          if [ -z "$CHANGED" ]; then
+            CHANGED_DIRS=$(git diff --name-only "origin/${{ github.base_ref }}" HEAD -- 'scenarios/' 2>/dev/null | cut -d/ -f1-2 | sort -u)
+            for d in $CHANGED_DIRS; do
+              if [ -d "$d" ]; then
+                FOUND=$(find "$d" -name "plan*.json" | sort)
+                CHANGED=$(printf "%s\n%s" "$CHANGED" "$FOUND")
+              fi
+            done
+            CHANGED=$(echo "$CHANGED" | sed '/^[[:space:]]*$/d' | sort -u)
+          fi
+
+          # Fallback to all plan files if still empty
+          if [ -z "$CHANGED" ]; then
+            CHANGED=$(find scenarios -name "plan*.json" | sort)
+          fi
+
           echo "plans<<EOF" >> "$GITHUB_OUTPUT"
           echo "$CHANGED" >> "$GITHUB_OUTPUT"
           echo "EOF" >> "$GITHUB_OUTPUT"
