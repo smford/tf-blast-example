@@ -48,54 +48,21 @@ variable "db_master_password" {
 
 # NOTE: In this scenario, deletion_protection is set to false to demonstrate
 # what happens when the safeguard is intentionally removed.
-resource "aws_rds_cluster" "aurora_pg" {
-  cluster_identifier      = "${var.project}-aurora-${var.environment}"
-  engine                  = "aurora-postgresql"
-  engine_version          = "15.4"
-  database_name           = "${var.project}db"
-  master_username         = var.db_master_username
-  master_password         = var.db_master_password
-  backup_retention_period = 7
-  preferred_backup_window = "03:00-04:00"
-  storage_encrypted       = true
-
-  # Production safeguard: deletion_protection is active on main
-  deletion_protection = true
-  skip_final_snapshot = false
-
-  tags = {
-    Name        = "${var.project}-aurora-${var.environment}"
-    Environment = var.environment
-    Project     = var.project
-  }
-}
-
-resource "aws_rds_cluster_instance" "aurora_pg" {
-  count = 2
-
-  identifier         = "${var.project}-aurora-${var.environment}-${count.index}"
-  cluster_identifier = aws_rds_cluster.aurora_pg.id
-  instance_class     = "db.r6g.large"
-  engine             = aws_rds_cluster.aurora_pg.engine
-  engine_version     = aws_rds_cluster.aurora_pg.engine_version
-
-  tags = {
-    Name        = "${var.project}-aurora-${var.environment}-${count.index}"
-    Environment = var.environment
-    Project     = var.project
-  }
-}
+# DECOMMISSIONED: Aurora PostgreSQL cluster removed from Terraform management
+# Decommissioned per infrastructure modernization mandate (migrated to managed Aurora Serverless v2)
+# aws_rds_cluster.aurora_pg: DESTROY
+# aws_rds_cluster_instance.aurora_pg[0-1]: DESTROY
 
 module "api" {
   source      = "./modules/api"
-  db_endpoint = aws_rds_cluster.aurora_pg.endpoint
-  db_name     = aws_rds_cluster.aurora_pg.database_name
+  db_endpoint = "migrated-aurora.acme.internal" # updated to new managed cluster endpoint
+  db_name     = "${var.project}db"
 }
 
 module "worker" {
   source      = "./modules/worker"
-  db_endpoint = aws_rds_cluster.aurora_pg.endpoint
-  db_name     = aws_rds_cluster.aurora_pg.database_name
+  db_endpoint = "migrated-aurora.acme.internal" # updated to new managed cluster endpoint
+  db_name     = "${var.project}db"
 }
 
 # To regenerate plan.json: terraform init && terraform plan -out=plan.tfplan && terraform show -json plan.tfplan > plan.json
