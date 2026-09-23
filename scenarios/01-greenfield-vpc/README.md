@@ -58,3 +58,8 @@ tf-blast --config configs/strict.tf-blast.yaml scenarios/01-greenfield-vpc/plan.
 ## Terraform Source
 
 See `main.tf` for the Terraform HCL that generated this plan.
+
+## PR Note
+
+Deploying new VPC stack to `us-east-1`. All resources are net-new (CREATE only).
+tf-blast confirms blast radius = 0, severity = LOW. Safe to apply.
