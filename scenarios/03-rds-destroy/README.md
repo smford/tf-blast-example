@@ -64,3 +64,11 @@ tf-blast --config configs/permissive.tf-blast.yaml scenarios/03-rds-destroy/plan
 ## Terraform Source
 
 See `main.tf` for the Terraform HCL that generated this plan.
+
+## PR Note
+
+⚠️ **CRITICAL** — Decommissioning the Aurora PostgreSQL cluster from Terraform state.
+- Removes `aws_rds_cluster.aurora_pg` and 2x `aws_rds_cluster_instance` (DESTROY)
+- Updates downstream `module.api` and `module.worker` to point to migrated endpoint
+
+tf-blast: blast=4, severity=CRITICAL, exit=1 — **pipeline gate blocks merge.**
