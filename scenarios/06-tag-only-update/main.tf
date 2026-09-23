@@ -24,7 +24,7 @@ locals {
     Environment = var.environment
     Project     = var.project
     ManagedBy   = "terraform"
-    # CostCentre tag not yet applied — will be added in this PR
+    CostCentre  = "engineering-platform"
   }
 }
 

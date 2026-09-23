@@ -56,3 +56,11 @@ tf-blast --output json scenarios/06-tag-only-update/plan.json | jq .summary
 | Max Severity | LOW |
 | Plan Health | CLEAN |
 | Exit Code | 0 |
+
+## PR Note
+
+Bulk tagging rollout: adding `CostCentre: "engineering-platform"` across all 20 resources.
+All changes are tag-only in-place UPDATEs.
+No structural changes, no replacements, no destroys.
+
+tf-blast: blast=0, severity=LOW, exit=0 — safe to auto-approve.
