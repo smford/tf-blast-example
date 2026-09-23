@@ -111,8 +111,8 @@ module "app" {
   task_exec_role = module.iam.task_exec_role_arn
 
   # Current desired counts — scaling event triggered this plan
-  api_desired_count    = 2   # will be updated to 4 in this PR
-  worker_desired_count = 2   # will be updated to 4 in this PR
+  api_desired_count    = 4   # scaled up for peak traffic
+  worker_desired_count = 4   # scaled up for peak traffic
 }
 
 # --- module.data: Aurora + ElastiCache + S3 ---
@@ -133,7 +133,7 @@ module "iam" {
   common_tags = local.common_tags
 
   # Assume-role policy — grants ECS tasks.amazonaws.com principal
-  ecs_trusted_principals = ["ecs-tasks.amazonaws.com"]
+  ecs_trusted_principals = ["ecs-tasks.amazonaws.com", "application-autoscaling.amazonaws.com"]
 }
 
 # To regenerate plan.json: terraform init && terraform plan -out=plan.tfplan && terraform show -json plan.tfplan > plan.json

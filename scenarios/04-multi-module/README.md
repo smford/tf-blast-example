@@ -61,3 +61,12 @@ tf-blast --output json scenarios/04-multi-module/plan.json > multi-module-analys
 ## Terraform Source
 
 The HCL source is split across module directories. See the module structure under `scenarios/04-multi-module/`.
+
+## PR Note
+
+Scale up ECS services and update IAM trust relationships across multi-module infrastructure:
+- `module.app.aws_ecs_service.api`: desired_count 2 -> 4
+- `module.app.aws_ecs_service.worker`: desired_count 2 -> 4
+- `module.iam.aws_iam_role.ecs_task`: assume_role_policy update to add autoscaling principal
+
+tf-blast: 36 resources, blast=2, severity=HIGH.
