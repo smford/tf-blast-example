@@ -26,14 +26,14 @@ resource "aws_instance" "api" {
   count = 3
 
   ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t3.micro"   # upgrading to t3.small in this PR
+  instance_type = "t3.small"   # upgraded from t3.micro
 
   tags = merge(local.common_tags, { Name = "${local.name_prefix}-api-${count.index}" })
 }
 
 resource "aws_cloudwatch_log_group" "api" {
   name              = "/aws/${local.name_prefix}/api"
-  retention_in_days = 7   # increasing to 14 days in this PR
+  retention_in_days = 14   # increased retention from 7 days
 
   tags = local.common_tags
 }
@@ -60,18 +60,12 @@ resource "aws_security_group" "dev_app" {
 
 # --- STAGING environment (separate root module, shown here for reference) ---
 
-# Bastion host — being decommissioned in this PR (DESTROY)
-resource "aws_instance" "bastion" {
-  ami           = "ami-0c55b159cbfafe1f0"
-  instance_type = "t3.micro"
-  key_name      = "${local.name_prefix}-bastion"
-
-  tags = merge(local.common_tags, { Name = "${local.name_prefix}-bastion", Role = "bastion" })
-}
+# Bastion host decommissioned in this PR (DESTROY)
+# resource "aws_instance" "bastion" removed per security mandate
 
 # Staging DB Security Group — renaming name forces REPLACE, cascades to RDS cluster
 resource "aws_security_group" "staging_db" {
-  name   = "acme-staging-db"   # renaming to "acme-staging-database" in this PR
+  name   = "acme-staging-database" # renamed from acme-staging-db (forces REPLACE)
   vpc_id = "vpc-stg0123456789abcdef"
 
   ingress {

@@ -97,3 +97,12 @@ multiple root modules in a single pipeline run. Without aggregation, a reviewer
 might approve the "safe" dev plan without realising the full blast radius includes
 the staging replacement and destroy. tf-blast's multi-plan mode gives a unified,
 honest picture of the total change set.
+
+## PR Note
+
+Simultaneous release across dev and staging environments:
+- `dev`: EC2 instance sizing upgrade (t3.micro -> t3.small) and CloudWatch retention bump (7 -> 14 days)
+- `staging`: Decommission bastion instance (DESTROY) and rename staging DB security group (REPLACE)
+
+tf-blast aggregate: blast=4, severity=CRITICAL (staging DESTROY + REPLACE).
+Requires SRE and Security sign-off before deployment window.
