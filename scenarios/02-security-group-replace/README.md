@@ -53,3 +53,11 @@ tf-blast --output markdown scenarios/02-security-group-replace/plan.json
 ## Terraform Source
 
 See `main.tf` for the Terraform HCL that generated this plan.
+
+## PR Note
+
+Renaming SG from `app-servers-sg` -> `app-servers-sg-v2` to align with new
+naming standard. **AWS SG names are immutable** — this forces a REPLACE
+(destroy + create) of the SG and cascades to all 6 EC2 instances referencing it.
+
+tf-blast: blast=6, severity=HIGH — review and sign-off required.
