@@ -43,8 +43,8 @@ variable "vpc_id" {
 # because AWS security group names are immutable once created.
 # This replacement cascades to all EC2 instances using this SG.
 resource "aws_security_group" "app_servers" {
-  name        = "app-servers-sg"
-  description = "Application servers security group"
+  name        = "app-servers-sg-v2"
+  description = "Application servers security group v2"
   vpc_id      = var.vpc_id
 
   ingress {
