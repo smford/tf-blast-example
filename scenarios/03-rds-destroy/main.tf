@@ -59,9 +59,8 @@ resource "aws_rds_cluster" "aurora_pg" {
   preferred_backup_window = "03:00-04:00"
   storage_encrypted       = true
 
-  # WARNING: deletion_protection should normally be true in production.
-  # This is set to false only for demonstration purposes.
-  deletion_protection = false
+  # Production safeguard: deletion_protection is active on main
+  deletion_protection = true
   skip_final_snapshot = false
 
   tags = {
