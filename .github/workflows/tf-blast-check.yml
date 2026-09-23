@@ -19,6 +19,23 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      # Pre-install tf-blast so the action's internal install step is skipped.
+      # This works around a GNU tar member-name mismatch (./tf-blast vs tf-blast)
+      # in the action's bundled installer on ubuntu-latest runners.
+      - name: Install tf-blast
+        run: |
+          TMP_DIR=$(mktemp -d)
+          INSTALL_DIR="$HOME/.local/bin"
+          mkdir -p "$INSTALL_DIR"
+          curl -sSL \
+            https://github.com/smford/tf-blast/releases/download/v1.2.1/tf-blast_1.2.1_linux_amd64.tar.gz \
+            | tar xz -C "$TMP_DIR"
+          mv "$TMP_DIR/tf-blast" "$INSTALL_DIR/tf-blast"
+          chmod +x "$INSTALL_DIR/tf-blast"
+          rm -rf "$TMP_DIR"
+          echo "$INSTALL_DIR" >> "$GITHUB_PATH"
+          "$INSTALL_DIR/tf-blast" --version
+
       # In a real Terraform project, plan generation would look like:
       #   - name: Setup Terraform
       #     uses: hashicorp/setup-terraform@v3
