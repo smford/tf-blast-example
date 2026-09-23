@@ -1,0 +1,191 @@
+name: "PR Blast Radius Check"
+
+# Runs on every pull request targeting main.
+# tf-blast analyses the plan JSON(s) associated with the changed scenario,
+# posts a comment on the PR with the blast-radius report, and gates the
+# merge if severity exceeds the configured threshold.
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      # Only run when plan files or Terraform source changes
+      - "scenarios/**/plan*.json"
+      - "scenarios/**/*.tf"
+      - "configs/**"
+
+jobs:
+  blast-radius:
+    name: "Blast Radius Analysis"
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write       # post/update PR comment
+      security-events: write     # upload SARIF to Code Scanning
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # Install tf-blast via temp-dir extraction (portable across GNU/BSD tar)
+      - name: Install tf-blast
+        run: |
+          TMP_DIR=$(mktemp -d)
+          INSTALL_DIR="$HOME/.local/bin"
+          mkdir -p "$INSTALL_DIR"
+          curl -sSL \
+            https://github.com/smford/tf-blast/releases/download/v1.2.1/tf-blast_1.2.1_linux_amd64.tar.gz \
+            | tar xz -C "$TMP_DIR"
+          mv "$TMP_DIR/tf-blast" "$INSTALL_DIR/tf-blast"
+          chmod +x "$INSTALL_DIR/tf-blast"
+          rm -rf "$TMP_DIR"
+          echo "$INSTALL_DIR" >> "$GITHUB_PATH"
+          "$INSTALL_DIR/tf-blast" --version
+
+      # Discover which plan files changed in this PR and run tf-blast on each.
+      # Results are collected into a single aggregated Markdown comment.
+      - name: Detect changed plan files
+        id: changed-plans
+        run: |
+          # Get list of changed plan JSON files vs the base branch
+          git fetch origin "${{ github.base_ref }}" --depth=1 2>/dev/null || true
+          CHANGED=$(git diff --name-only "origin/${{ github.base_ref }}" HEAD \
+            -- 'scenarios/**/plan*.json' 2>/dev/null || \
+            find scenarios -name "plan*.json" | sort)
+          echo "plans<<EOF" >> "$GITHUB_OUTPUT"
+          echo "$CHANGED" >> "$GITHUB_OUTPUT"
+          echo "EOF" >> "$GITHUB_OUTPUT"
+          echo "Found plan files:"
+          echo "$CHANGED"
+
+      - name: Run tf-blast on changed plans
+        id: blast
+        run: |
+          set +e
+          PLANS="${{ steps.changed-plans.outputs.plans }}"
+
+          if [ -z "$PLANS" ]; then
+            echo "No plan files changed — skipping blast analysis."
+            echo "summary=No Terraform plan files changed in this PR." >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          OVERALL_EXIT=0
+          REPORT_BODY="## 💥 tf-blast Blast Radius Report\n\n"
+          REPORT_BODY+="_Analysing Terraform plans changed in this PR_\n\n"
+          REPORT_BODY+="---\n\n"
+
+          for PLAN in $PLANS; do
+            [ -f "$PLAN" ] || continue
+
+            SCENARIO=$(dirname "$PLAN" | sed 's|scenarios/||')
+            OUT_FILE="${PLAN%.json}.blast.md"
+            SARIF_FILE="${PLAN%.json}.sarif"
+
+            echo "Analysing: $PLAN"
+
+            # Run tf-blast — exit 1 = policy violation, exit 2 = parse error
+            tf-blast \
+              --output markdown \
+              --out-file "$OUT_FILE" \
+              --fail-on critical \
+              "$PLAN"
+            EXIT=$?
+
+            # Generate SARIF alongside (best-effort)
+            tf-blast --output sarif --out-file "$SARIF_FILE" -s "$PLAN" || true
+
+            if [ "$EXIT" -eq 2 ]; then
+              REPORT_BODY+="### ⛔ \`$SCENARIO\` — Parse Error\n\n"
+              REPORT_BODY+="\`\`\`\nFailed to parse $PLAN\n\`\`\`\n\n"
+              OVERALL_EXIT=1
+            elif [ -f "$OUT_FILE" ]; then
+              REPORT_BODY+="### 📋 \`$SCENARIO\`\n\n"
+              REPORT_BODY+="$(cat "$OUT_FILE")\n\n"
+              if [ "$EXIT" -ne 0 ]; then
+                OVERALL_EXIT=1
+              fi
+            fi
+
+            REPORT_BODY+="---\n\n"
+          done
+
+          if [ "$OVERALL_EXIT" -ne 0 ]; then
+            REPORT_BODY+="⛔ **One or more plans exceeded the blast-radius policy threshold.**\n"
+            REPORT_BODY+="Review the report above before merging.\n"
+          else
+            REPORT_BODY+="✅ **All plans passed the blast-radius policy check.**\n"
+          fi
+
+          # Write report to file for the comment step
+          printf "%b" "$REPORT_BODY" > pr-blast-report.md
+          echo "exit_code=$OVERALL_EXIT" >> "$GITHUB_OUTPUT"
+
+      - name: Post PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const fs = require('fs');
+            const reportFile = 'pr-blast-report.md';
+            if (!fs.existsSync(reportFile)) {
+              console.log('No report file found — skipping comment.');
+              return;
+            }
+
+            const body = fs.readFileSync(reportFile, 'utf8');
+            const tag = '<!-- tf-blast-pr-report -->';
+            const fullBody = `${tag}\n${body}`;
+
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const existing = comments.find(c => c.body.includes(tag));
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body: fullBody,
+              });
+              console.log('Updated existing PR comment.');
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body: fullBody,
+              });
+              console.log('Created new PR comment.');
+            }
+
+      - name: Upload SARIF reports
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: scenarios/
+          category: tf-blast-pr
+        continue-on-error: true   # non-fatal if Code Scanning not enabled
+
+      - name: Upload blast reports as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: blast-radius-reports
+          path: "scenarios/**/*.blast.md"
+          retention-days: 30
+
+      # Gate: fail the job if any plan violated policy
+      - name: Policy gate
+        if: always()
+        run: |
+          EXIT="${{ steps.blast.outputs.exit_code }}"
+          if [ "${EXIT:-0}" -ne 0 ]; then
+            echo "::error::One or more Terraform plans exceeded the blast-radius policy threshold. Review the PR comment."
+            exit 1
+          fi
+          echo "All plans passed policy checks."
