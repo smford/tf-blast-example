@@ -69,14 +69,14 @@ resource "aws_instance" "bastion" {
   tags = merge(local.common_tags, { Name = "${local.name_prefix}-bastion", Role = "bastion" })
 }
 
-# Staging SG — name being renamed (REPLACE, cascades to 3 EC2 instances)
-resource "aws_security_group" "staging_app" {
-  name   = "acme-staging-app"   # renaming to "acme-staging-app-v2" in this PR
+# Staging DB Security Group — renaming name forces REPLACE, cascades to RDS cluster
+resource "aws_security_group" "staging_db" {
+  name   = "acme-staging-db"   # renaming to "acme-staging-database" in this PR
   vpc_id = "vpc-stg0123456789abcdef"
 
   ingress {
-    from_port   = 8080
-    to_port     = 8080
+    from_port   = 5432
+    to_port     = 5432
     protocol    = "tcp"
     cidr_blocks = ["10.0.0.0/8"]
   }
@@ -87,17 +87,21 @@ resource "aws_security_group" "staging_app" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(local.common_tags, { Name = "acme-staging-app-sg" })
+  tags = merge(local.common_tags, { Name = "acme-staging-db-sg" })
 }
 
-resource "aws_instance" "staging_app" {
-  count = 3
+resource "aws_rds_cluster" "staging_db" {
+  cluster_identifier     = "acme-staging-db"
+  vpc_security_group_ids = [aws_security_group.staging_db.id]
+  engine                 = "aurora-postgresql"
+  tags                   = merge(local.common_tags, { Name = "acme-staging-db" })
+}
 
-  ami                    = "ami-0c55b159cbfafe1f0"
-  instance_type          = "t3.medium"
-  vpc_security_group_ids = [aws_security_group.staging_app.id]
-
-  tags = merge(local.common_tags, { Name = "acme-staging-app-${count.index}" })
+resource "aws_rds_cluster_instance" "staging_db" {
+  count              = 1
+  cluster_identifier = aws_rds_cluster.staging_db.id
+  instance_class     = "db.r6g.large"
+  engine             = aws_rds_cluster.staging_db.engine
 }
 
 # To regenerate plan JSONs:
