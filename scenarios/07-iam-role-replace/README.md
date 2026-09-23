@@ -86,3 +86,12 @@ or use `create_before_destroy` lifecycle rules.
 See `main.tf` (not included in this scenario — the plan JSON is the primary artifact).
 In a real project the rename would appear as a change to the `name` argument in
 `aws_iam_role.ecs_task_execution`.
+
+## PR Note
+
+Renaming IAM role `AcmeECSTaskExecutionRole` to kebab-case `acme-prod-ecs-task-execution`.
+Because IAM role names are immutable in AWS:
+- Old role will be DESTROYED and new role CREATED (REPLACE)
+- New ARN causes cascading updates to 4 policy attachments and 3 ECS task definitions
+
+tf-blast: blast=7, severity=HIGH — requires SRE review and scheduled deployment window.

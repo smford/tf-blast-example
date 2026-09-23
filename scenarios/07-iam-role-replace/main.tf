@@ -30,8 +30,8 @@ locals {
 # IAM role names are immutable once created. The new role gets a new ARN,
 # which cascades to all policy attachments and ECS task definitions.
 resource "aws_iam_role" "ecs_task_execution" {
-  # BEFORE: legacy PascalCase name — will be renamed in this PR
-  name = "AcmeECSTaskExecutionRole"
+  # Renamed to kebab-case (forces REPLACE — IAM role names are immutable)
+  name = "acme-prod-ecs-task-execution"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
