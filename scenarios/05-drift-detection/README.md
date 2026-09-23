@@ -52,3 +52,12 @@ tf-blast --output markdown scenarios/05-drift-detection/plan.json
 ## Terraform Source
 
 The Terraform HCL for this scenario does not have a separate `main.tf` — the drift is detected from existing state.
+
+## PR Note
+
+Remediate security group drift detected during routine terraform plan:
+- An out-of-band SSH rule (`0.0.0.0/0:22`) was manually created in AWS console
+- Applying this plan removes the rogue rule and restores known state
+- Added `revoke_rules_on_delete = true` and `Compliance = "cis-benchmark-remediated"` tag
+
+tf-blast: drift_count=1, severity=HIGH, blast=2 (downstream instances updated).

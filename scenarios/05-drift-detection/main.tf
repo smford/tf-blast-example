@@ -26,6 +26,7 @@ resource "aws_security_group" "app" {
   name        = "${local.name_prefix}-app"
   description = "Application server security group"
   vpc_id      = var.vpc_id
+  revoke_rules_on_delete = true
 
   # Authorised ingress rules only — no SSH from the internet
   ingress {
@@ -43,7 +44,10 @@ resource "aws_security_group" "app" {
     cidr_blocks = ["0.0.0.0/0"]
   }
 
-  tags = merge(local.common_tags, { Name = "${local.name_prefix}-app-sg" })
+  tags = merge(local.common_tags, {
+    Name       = "${local.name_prefix}-app-sg"
+    Compliance = "cis-benchmark-remediated"
+  })
 }
 
 resource "aws_instance" "app" {
