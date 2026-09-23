@@ -57,23 +57,25 @@ jobs:
           out-file: scenario-01-report.md
           post-pr-comment: "false"   # comment posted by the aggregated step below
 
-      # --- Scenario 02: Security Group Replace (fails with strict policy) ---
+      # --- Scenario 02: Security Group Replace (HIGH severity with strict policy) ---
+      # fail-on is intentionally omitted: this scenario demonstrates a HIGH-severity
+      # plan and continue-on-error handles the workflow flow. Adding fail-on here
+      # would emit a spurious ::error:: annotation even though the outcome is expected.
+      # upload-sarif is disabled: GitHub Code Scanning rejects more than one
+      # upload per tool per job — Scenario 03 holds the sole SARIF upload.
       - name: "Scenario 02 - Security Group Replace"
         id: sg-replace
-        # continue-on-error allows the workflow to collect all results
-        # before making a final pass/fail decision
         continue-on-error: true
         uses: smford/tf-blast@v1.2.1
         with:
           plan-file: scenarios/02-security-group-replace/plan.json
-          fail-on: "high"
           config: configs/strict.tf-blast.yaml
           out-file: scenario-02-report.md
           sarif-file: scenario-02.sarif
-          upload-sarif: "true"
+          upload-sarif: "false"
           post-pr-comment: "false"
 
-      # --- Scenario 03: RDS Destroy (always fails with default policy) ---
+      # --- Scenario 03: RDS Destroy (CRITICAL severity, always fails) ---
       - name: "Scenario 03 - RDS Aurora Destroy"
         id: rds-destroy
         continue-on-error: true
